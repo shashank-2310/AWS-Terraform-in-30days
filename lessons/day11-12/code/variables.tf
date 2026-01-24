@@ -42,3 +42,40 @@ variable "instance_size" {
     prod    = "t3.large"
   }
 }
+
+variable "instance_type" {
+  default = "t2.micro"
+  validation {
+    condition = length(var.instance_type) >= 2 && length(var.instance_type) <= 20
+    error_message = "Instance type must be between 2 and 20 characters long"
+  }
+  validation {
+    condition = can(regex("^t[2-3]\\.", var.instance_type))
+    error_message = "Instance type must start with t2 or t3"
+  }
+}
+
+variable "backup_name" {
+  default = "daily_backup"
+  validation {
+    condition = endswith(var.backup_name, "_backup")
+    error_message = "Backup name must end with '_backup'"
+  }
+}
+
+variable "creds" {
+  default = "xyz12345"
+  # sensitive = true
+}
+
+variable "user_location" {
+  default = ["us-east-1", "us-west-2", "us-west-1"]
+}
+
+variable "default_location" {
+  default = ["us-west-1"]
+}
+
+variable "monthly_cost" {
+  default = [-50, 100, 75, 200] # -50 is a credit
+}
